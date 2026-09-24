@@ -1,0 +1,45 @@
+-- ==========================================
+--   JIM HUB — Steal An Egg Edition
+--   Auto Detect | No Key 🔑
+--   Buatan Kamu ✨
+-- ==========================================
+
+if _G.JimHub_Loaded then return end
+_G.JimHub_Loaded = true
+
+local PlaceId = game.PlaceId
+local ScriptUrl = ""
+
+-- ✅ DAFTAR ID STEAL AN EGG
+local StealAnEgg_IDs = {
+    109983668079237,  -- Steal an Egg (Utama)
+    128762245270197,  -- Versi Lain
+    96342491571673,   -- Versi Lain
+    85621847059032,   -- Versi Lain
+    99606176102979,   -- Versi Lain
+    99392882090073,   -- Versi Lain
+    123923334828954   -- Versi Lain
+}
+
+-- Cek apakah sedang main Steal an Egg
+local IsStealAnEgg = false
+for _, id in pairs(StealAnEgg_IDs) do
+    if PlaceId == id then
+        IsStealAnEgg = true
+        break
+    end
+end
+
+-- Muat Script
+if IsStealAnEgg then
+    -- 👇 Ganti dengan link script kamu / sumbernya
+    ScriptUrl = "https://raw.githubusercontent.com/Kenniel123/Steal-A-Egg/refs/heads/main/Steal%20A%20Egg"
+end
+
+-- Jalankan
+if ScriptUrl ~= "" then
+    print("[Jim Hub] ✅ Steal An Egg terdeteksi — memuat...")
+    loadstring(game:HttpGet(ScriptUrl))()
+else
+    warn("[Jim Hub] ❌ Bukan game Steal An Egg! PlaceId: "..PlaceId)
+end
