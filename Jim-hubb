@@ -1,0 +1,41 @@
+-- LKZ Hub | Steal an Egg
+-- Author: LucasggkX
+-- NO KEY — Auto Load ✅
+
+if _G.LKZ_Loaded then return end
+_G.LKZ_Loaded = true
+
+local PlaceId = game.PlaceId
+local ScriptUrl = ""
+
+-- Steal an Egg PlaceId List
+local StealAnEgg_IDs = {
+    109983668079237,
+    128762245270197,
+    96342491571673,
+    85621847059032,
+    99606176102979,
+    99392882090073,
+    123923334828954
+}
+
+-- Cek apakah game = Steal an Egg
+local IsStealAnEgg = false
+for _, id in pairs(StealAnEgg_IDs) do
+    if PlaceId == id then
+        IsStealAnEgg = true
+        break
+    end
+end
+
+if IsStealAnEgg then
+    -- Muat skrip Steal an Egg
+    ScriptUrl = "https://api.luarmor.net/files/v4/loaders/66705d62b53668c135171165c745016a.lua"
+end
+
+-- Jalankan
+if ScriptUrl ~= "" then
+    loadstring(game:HttpGet(ScriptUrl))()
+else
+    warn("[LKZ Hub] Game belum didukung! PlaceId: "..PlaceId)
+end
