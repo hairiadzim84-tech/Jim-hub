@@ -1,0 +1,93 @@
+-- ==========================================
+--   FLING KHUSUS HP — Sentuh Layar = Lempar!
+--   No Key | Gampang Dipakai di HP ✨
+-- ==========================================
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- 🔧 PENGATURAN — Sesuaikan sesuka hati!
+local Settings = {
+    Power = 600,        -- Kekuatan lemparan: 300=biasa | 800=jauh | 1500=sangat jauh
+    Tinggi = 450,       -- Ketinggian saat dilempar
+    OtomatisUlang = true -- Bisa dipakai berkali-kali tanpa henti
+}
+
+-- 💥 FUNGSI LEMPAR
+local function LemparOrang(Target)
+    if not Target or not Target.Character then return end
+    local Root = Target.Character:FindFirstChild("HumanoidRootPart")
+    local Hum = Target.Character:FindFirstChild("Humanoid")
+    if not Root or not Hum then return end
+
+    Hum.PlatformStand = true
+    local Arah = (Root.Position - LocalPlayer.Character.HumanoidRootPart.Position).Unit
+    Root.Velocity = Arah * Settings.Power + Vector3.new(0, Settings.Tinggi, 0)
+
+    task.wait(1.2)
+    if Hum then Hum.PlatformStand = false end
+end
+
+-- 🎯 CARI ORANG TERPDEKAT
+local function CariTerdekat()
+    local Terdekat, JarakMin = nil, math.huge
+    for _, Plr in pairs(Players:GetPlayers()) do
+        if Plr ~= LocalPlayer and Plr.Character and Plr.Character:FindFirstChild("HumanoidRootPart") then
+            local Jarak = (LocalPlayer.Character.HumanoidRootPart.Position - Plr.Character.HumanoidRootPart.Position).Magnitude
+            if Jarak < JarakMin then
+                JarakMin = Jarak
+                Terdekat = Plr
+            end
+        end
+    end
+    return Terdekat
+end
+
+-- 📱 TOMBOL DI LAYAR UNTUK HP
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "✅ FLING HP SIAP!",
+    Text = "Tekan tombol hijau di layar → lempar orang!",
+    Duration = 5
+})
+
+-- Buat tombol layar
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "FlingHP"
+ScreenGui.Parent = LocalPlayer:FindFirstChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+local Tombol = Instance.new("TextButton")
+Tombol.Size = UDim2.new(0, 140, 0, 140)
+Tombol.Position = UDim2.new(0.82, 0, 0.78, 0)
+Tombol.BackgroundColor3 = Color3.fromRGB(46, 204, 113)
+Tombol.Text = "💥 LEMPAR"
+Tombol.TextColor3 = Color3.fromRGB(255, 255, 255)
+Tombol.Font = Enum.Font.GothamBold
+Tombol.TextScaled = true
+Tombol.BorderSizePixel = 0
+Tombol.AutoLocalize = false
+Tombol.Parent = ScreenGui
+
+-- Efek tombol ditekan
+Tombol.MouseButton1Down:Connect(function()
+    Tombol.BackgroundColor3 = Color3.fromRGB(39, 174, 96)
+    local Orang = CariTerdekat()
+    if Orang then
+        LemparOrang(Orang)
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "💥 TERLEMPAR!",
+            Text = Orang.Name,
+            Duration = 2
+        })
+    else
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "❌ Tidak ada orang dekat",
+            Text = "Dekati orang dulu!",
+            Duration = 2
+        })
+    end
+    task.wait(0.2)
+    Tombol.BackgroundColor3 = Color3.fromRGB(46, 204, 113)
+end)
+
+print("[Fling HP] ✅ Siap dipakai di HP! Tekan tombol hijau di layar!")
